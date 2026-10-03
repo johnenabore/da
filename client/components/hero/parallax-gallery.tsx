@@ -66,7 +66,17 @@ const SPRING = { stiffness: 120, damping: 30, mass: 0.3 };
 // Where each column starts, measured from the top of the gallery. The gallery
 // itself is pulled up over the hero, so these let the photos step down across
 // the hero like the reference.
-const columnStarts = ["mt-0", "mt-[40svh]", "mt-[17svh]", "mt-[40svh]", "mt-0"];
+//
+// Below md (phones) only the first two columns show, like the mobile reference:
+// the left one starts 10svh down and the right one 26svh (a 16svh step), with
+// the other three hidden. Each entry is the column's display and start classes.
+const columnStarts = [
+  "flex mt-[10svh] md:mt-0",
+  "flex mt-[26svh] md:mt-[40svh]",
+  "hidden md:flex md:mt-[17svh]",
+  "hidden md:flex md:mt-[40svh]",
+  "hidden md:flex md:mt-0",
+];
 
 // Every CYCLE_MS the photos change. The new photo wipes in left to right across
 // each card (WIPE_S), and the columns start one after another (STAGGER_S apart),
@@ -87,8 +97,10 @@ type Edge = "left" | "right";
 // adds 1rem to also clear a classic scrollbar, since vw includes its width.
 // Full class strings so Tailwind can see them.
 const rowShift: Record<Edge, string> = {
-  left: "translate-x-[15.2vw]",
-  right: "-translate-x-[calc(15.2vw+1rem)]",
+  // md: up only, so a mouse on a narrow window doesn't push the two-column phone
+  // layout sideways.
+  left: "md:translate-x-[15.2vw]",
+  right: "md:-translate-x-[calc(15.2vw+1rem)]",
 };
 
 // A card whose photo slides inside its frame as the card crosses the viewport.
@@ -155,8 +167,7 @@ function ParallaxCard({
     >
       <div
         ref={ref}
-        className="relative w-full overflow-hidden bg-secondary"
-        style={{ aspectRatio: "4 / 5" }}
+        className="relative aspect-[3/4] w-full overflow-hidden bg-secondary md:aspect-[4/5]"
       >
         {/* Scaled up so the slide never exposes the card edges */}
         <motion.div
@@ -186,7 +197,7 @@ function ParallaxCard({
                   src={layer.src}
                   alt={alt}
                   fill
-                  sizes="(min-width: 768px) 26vw, 45vw"
+                  sizes="(min-width: 768px) 26vw, 47vw"
                   loading={eager && !layer.enter ? "eager" : "lazy"}
                   className="object-cover"
                 />
@@ -232,7 +243,7 @@ function Column({
   return (
     <motion.div
       style={{ y }}
-      className={`flex w-[45vw] shrink-0 flex-col gap-2 will-change-transform md:w-[25.6vw] ${start}`}
+      className={`${start} w-[46.7vw] shrink-0 flex-col gap-[2.3vw] will-change-transform md:w-[25.6vw] md:gap-2`}
       // Mouse only, so touch taps don't leave the row stuck in the shifted state
       onPointerEnter={
         edge
@@ -304,7 +315,7 @@ export function ParallaxGallery() {
     >
       {/* Wider than the viewport so the outer columns bleed off both edges */}
       <div
-        className={`ml-[-14.8vw] flex items-start gap-2 transition-[translate] duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+        className={`ml-[2vw] flex items-start gap-[2.3vw] transition-[translate] md:ml-[-14.8vw] md:gap-2 duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
           shift ? rowShift[shift] : ""
         }`}
       >
