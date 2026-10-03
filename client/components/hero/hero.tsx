@@ -30,6 +30,9 @@ const photos: HeroPhoto[] = [
   },
 ];
 
+// Short line next to the wordmark (three words at most).
+const SUBTEXT = "Moments worth keeping";
+
 export function HeroComponent() {
   const { phase, instant } = useIntro();
   const flying = phase !== "hold";
@@ -64,25 +67,46 @@ export function HeroComponent() {
 
           Intro, all CSS so it runs from the first paint (no wait for hydration):
           it starts centred — the viewport centre (50vw, 50svh) minus its resting
-          spot (18vw, 30svh), minus half its own size — rises in (.intro-rise),
-          then glides to translate 0 0 when the phase leaves "hold". */}
-      <h1
-        className={`
-          ${instant ? "" : "intro-rise"} font-display absolute left-[18vw] top-[30svh]
-          select-none text-[22vw] leading-none tracking-tight text-foreground
-          [text-box:trim-both_cap_alphabetic]
-          will-change-[translate] transition-[translate] duration-1400
-          ease-[cubic-bezier(0.76,0,0.24,1)] motion-reduce:transition-none
-          ${
-            flying
-              ? "translate-x-0 translate-y-0"
-              : "translate-x-[calc(32vw-50%)] translate-y-[calc(20svh-50%)]"
-          }
-        `}
-        aria-hidden
-      >
-        D&amp;A
-      </h1>
+          spot (4vw on phones, 18vw from md; 30svh), minus half its own size —
+          rises in (.intro-rise), then glides to translate 0 0 when the phase
+          leaves "hold". */}
+      {/* The wordmark and its subtext share a wrapper placed where the wordmark
+          rests (left 4vw on phones, 18vw from md up). The subtext is positioned
+          against the wrapper, so it follows the wordmark's edges at any size:
+          above it on phones, at its top-right corner on desktop. */}
+      <div className="absolute left-[4vw] top-[30svh] md:left-[18vw]">
+        <h1
+          className={`
+            ${instant ? "" : "intro-rise"} font-display block
+            select-none text-[40vw] leading-none tracking-tight text-foreground md:text-[22vw]
+            [text-box:trim-both_cap_alphabetic]
+            will-change-[translate] transition-[translate] duration-1400
+            ease-[cubic-bezier(0.76,0,0.24,1)] motion-reduce:transition-none
+            ${
+              flying
+                ? "translate-x-0 translate-y-0"
+                : "translate-x-[calc(46vw-50%)] translate-y-[calc(20svh-50%)] md:translate-x-[calc(32vw-50%)]"
+            }
+          `}
+          aria-hidden
+        >
+          D&amp;A
+        </h1>
+
+        {/* Fades in with the nav, once the wordmark has landed */}
+        <motion.p
+          className="absolute bottom-full left-0 mb-[4vw] w-[60vw] text-[5.5vw] leading-tight text-foreground md:bottom-auto md:left-full md:top-0 md:mb-0 md:ml-[2vw] md:w-[11vw] md:text-[1.05vw]"
+          initial={false}
+          animate={{ opacity: revealed ? 1 : 0 }}
+          transition={{
+            duration: instant ? 0 : 0.9,
+            delay: instant ? 0 : 0.3,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {SUBTEXT}
+        </motion.p>
+      </div>
     </section>
   );
 }
