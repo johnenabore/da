@@ -40,26 +40,6 @@ export function HeroComponent() {
 
   return (
     <section id="top" className="relative h-[100svh] w-full overflow-hidden bg-background">
-      {/* Nav — fades in as the wordmark lands */}
-      <motion.nav
-        className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-6 py-5 text-sm"
-        initial={false}
-        animate={{ opacity: revealed ? 1 : 0 }}
-        transition={{
-          duration: instant ? 0 : 0.9,
-          delay: instant ? 0 : 0.3,
-          ease: [0.16, 1, 0.3, 1],
-        }}
-      >
-        <span className="font-display">David &amp; Angela</span>
-        <div className="flex gap-6 text-muted-foreground">
-          <a href="#work">Work</a>
-          <a href="#services">Services</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </motion.nav>
-
       {/* Giant wordmark, sits behind the gallery photos.
           top-[30svh] is the gallery's top edge (100svh hero minus the gallery's
           -mt-[70svh] overlap) — keep the two in sync. text-box trims the empty

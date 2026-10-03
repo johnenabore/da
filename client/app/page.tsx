@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer/footer"
 import { HeroComponent } from "@/components/hero/hero"
 import { IntroProvider } from "@/components/hero/intro"
 import { ParallaxGallery } from "@/components/hero/parallax-gallery"
+import { SiteNav } from "@/components/nav/site-nav"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Testimonials } from "@/components/testimonials/testimonials"
 
@@ -12,6 +13,7 @@ const HomePage = () => {
    return (
       <IntroProvider>
          <SmoothScroll />
+         <SiteNav />
          <main className="relative z-10 bg-background">
              <HeroComponent />
              <ParallaxGallery />
